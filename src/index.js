@@ -252,7 +252,8 @@ const Swipeout = createReactClass({
     });
   },
 
-  _rubberBandEasing: function (value, limit) {
+  _rubberBandEasing: function (valueArg, limit) {
+    var value = valueArg.toString() === 'NaN' ? 0 : valueArg;
     if (value < 0 && value < limit) return limit - Math.pow(limit - value, 0.85);
     else if (value > 0 && value > limit) return limit + Math.pow(value - limit, 0.85);
     return value;
