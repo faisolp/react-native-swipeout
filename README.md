@@ -1,3 +1,9 @@
+
+# Fix Error
+
+ textStyle 
+ componentWillMount=>componentDidMount 
+ componentWillReceiveProps=>componentDidUpdate
 # DEPRECATED
 this is no longer supported, please consider using https://github.com/jemise111/react-native-swipe-list-view instead.
 

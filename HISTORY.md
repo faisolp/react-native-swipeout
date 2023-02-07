@@ -1,5 +1,9 @@
 # History
 
+# 2.3.7
+ - fix: textStyle 
+ - fix: componentWillMount=>componentDidMount 
+ - fix: componentWillReceiveProps=>componentDidUpdate
 # 2.2.2
 
 - fix: support old version react-native, support both `View.propTypes` and `ViewPropTypes`
