@@ -8,7 +8,7 @@ iOS-style swipeout buttons that appear from behind a component
 
 ## Installation
 ```
-npm install --save react-native-swipeout
+npm install --save @faisolp/react-native-swipeout
 ```
 
 ## Usage example
@@ -18,7 +18,7 @@ See the [Wiki](https://github.com/dancormier/react-native-swipeout/wiki) usage t
 To use swipeout behind a iOS-style listitem, try [react-native-listitem](https://github.com/dancormier/react-native-listitem).
 
 ```js
-import Swipeout from 'react-native-swipeout';
+import Swipeout from '@faisolp/react-native-swipeout';
 
 // Buttons
 var swipeoutBtns = [
@@ -68,4 +68,4 @@ disabled        | bool   | Yes      | false     | disable button
 
 ## To Do
 
-[https://github.com/dancormier/react-native-swipeout/issues](https://github.com/dancormier/react-native-swipeout/issues)
+[https://github.com/faisolp/react-native-swipeout/issues](https://github.com/faisolp/react-native-swipeout/issues)
