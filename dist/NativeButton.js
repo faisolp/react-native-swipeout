@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -6,31 +6,31 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require('prop-types');
+var _propTypes = require("prop-types");
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _createReactClass = require('create-react-class');
+var _createReactClass = require("create-react-class");
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
-var _reactNative = require('react-native');
+var _reactNative = require("react-native");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var styles = _reactNative.StyleSheet.create({
   button: {
-    flexDirection: 'row',
-    alignSelf: 'stretch',
-    justifyContent: 'center'
+    flexDirection: "row",
+    alignSelf: "stretch",
+    justifyContent: "center"
   },
   textButton: {
     fontSize: 14,
-    alignSelf: 'center'
+    alignSelf: "center"
   },
   opacity: {
     opacity: 0.8
@@ -38,11 +38,10 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 var NativeButton = (0, _createReactClass2.default)({
-  displayName: 'NativeButton',
-
+  displayName: "NativeButton",
 
   propTypes: _extends({}, _reactNative.TouchableWithoutFeedback.propTypes, {
-    textStyle: _propTypes2.default.any,
+    textStyle: _propTypes2.default.any, //PropTypes.shape(TextStyle),
     disabledStyle: _propTypes2.default.any,
     children: _propTypes2.default.node.isRequired,
     underlayColor: _propTypes2.default.string,
@@ -50,11 +49,12 @@ var NativeButton = (0, _createReactClass2.default)({
   }),
 
   statics: {
-    isAndroid: _reactNative.Platform.OS === 'android'
+    isAndroid: _reactNative.Platform.OS === "android"
   },
 
   getDefaultProps: function getDefaultProps() {
     return {
+      //textStyle: null,
       textStyle: null,
       disabledStyle: null,
       underlayColor: null
@@ -63,13 +63,17 @@ var NativeButton = (0, _createReactClass2.default)({
 
   _renderText: function _renderText() {
     // If children is not a string don't wrapp it in a Text component
-    if (typeof this.props.children !== 'string') {
+    if (typeof this.props.children !== "string") {
       return this.props.children;
     }
 
     return _react2.default.createElement(
       _reactNative.Text,
-      { numberOfLines: 1, ellipsizeMode: _reactNative.Platform.OS === 'ios' ? 'clip' : 'tail', style: [styles.textButton, this.props.textStyle] },
+      {
+        numberOfLines: 1,
+        ellipsizeMode: _reactNative.Platform.OS === "ios" ? "clip" : "tail",
+        style: [styles.textButton, this.props.textStyle]
+      },
       this.props.children
     );
   },
@@ -117,7 +121,8 @@ var NativeButton = (0, _createReactClass2.default)({
       _reactNative.TouchableHighlight,
       _extends({}, buttonProps, {
         style: [styles.button, this.props.style, disabledStyle],
-        underlayColor: this.props.underlayColor }),
+        underlayColor: this.props.underlayColor
+      }),
       this._renderText()
     );
   }

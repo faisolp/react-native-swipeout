@@ -139,7 +139,8 @@ const Swipeout = createReactClass({
     };
   },
 
-  componentWillMount: function () {
+  //componentWillMount:  function () {
+    componentDidMount:function (){
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (event, gestureState) => true,
       onStartShouldSetPanResponderCapture: (event, gestureState) =>
@@ -156,13 +157,14 @@ const Swipeout = createReactClass({
     });
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    if (nextProps.close) this._close();
-    if (nextProps.openRight) this._openRight();
-    if (nextProps.openLeft) this._openLeft();
+  //componentWillReceiveProps: function (nextProps) {
+  componentDidUpdate:function(prevProps){
+    if (prevProps.close) this._close();
+    if (prevProps.openRight) this._openRight();
+    if (prevProps.openLeft) this._openLeft();
   },
-
-  _handlePanResponderGrant: function (e: Object, gestureState: Object) {
+  _handlePanResponderGrant: function (e, gestureState) {
+  //_handlePanResponderGrant: function (e: Object, gestureState: Object) {
     if (this.props.disabled) return;
     if (!this.state.openedLeft && !this.state.openedRight) {
       this._callOnOpen();
@@ -185,7 +187,8 @@ const Swipeout = createReactClass({
     });
   },
 
-  _handlePanResponderMove: function (e: Object, gestureState: Object) {
+  _handlePanResponderMove: function (e, gestureState) {
+  //_handlePanResponderMove: function (e: Object, gestureState: Object) {
     if (this.props.disabled) return;
     var posX = gestureState.dx;
     var posY = gestureState.dy;
@@ -210,7 +213,8 @@ const Swipeout = createReactClass({
     }
   },
 
-  _handlePanResponderEnd: function (e: Object, gestureState: Object) {
+  //_handlePanResponderEnd: function (e: Object, gestureState: Object) {
+  _handlePanResponderEnd: function (e, gestureState) {
     if (this.props.disabled) return;
     var posX = gestureState.dx;
     var contentPos = this.state.contentPos;
@@ -407,7 +411,8 @@ const Swipeout = createReactClass({
 
     var isRightVisible = posX < 0;
     var isLeftVisible = posX > 0;
-
+    if(!this._panResponder)
+      return(<View style={styleSwipeout}></View>)
     return (
       <View style={styleSwipeout}>
         <View
