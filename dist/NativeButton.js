@@ -54,7 +54,6 @@ var NativeButton = (0, _createReactClass2.default)({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      //textStyle: null,
       textStyle: null,
       disabledStyle: null,
       underlayColor: null

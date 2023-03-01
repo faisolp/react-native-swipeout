@@ -4,6 +4,8 @@
 
 # Xcode
 #
+
+
 build/
 *.pbxuser
 !default.pbxuser
@@ -34,3 +36,4 @@ node_modules/
 npm-debug.log
 yarn.lock
 example/ios/ip.txt
+dist/

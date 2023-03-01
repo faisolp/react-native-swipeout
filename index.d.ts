@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare module 'react-native-swipeout' {
+declare module '@faisolp/react-native-swipeout' {
     export interface SwipeoutButtonProperties {
         backgroundColor?: string;
         color?: string;

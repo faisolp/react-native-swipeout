@@ -1,6 +1,6 @@
 {
   "name": "@faisolp/react-native-swipeout",
-  "version": "2.3.7",
+  "version": "2.3.7rc4",
   "description": "iOS-style swipeout buttons behind component",
   "main": "dist/index.js",
   "types": "index.d.ts",
@@ -24,7 +24,7 @@
   "author": "Faisolp",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sangzn34/react-native-swipeout/issues"
+    "url": "https://github.com/faisolp/react-native-swipeout/issues"
   },
   "homepage": "https://github.com/faisolp/react-native-swipeout",
   "dependencies": {
