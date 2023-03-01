@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react' //'/Users/faisolphalawon/Library/Caches/typescript/4.9/node_modules/@types/react/index'//
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
 
@@ -11,7 +11,8 @@ import {
   Platform,
   View,
   TextStyle,
-} from "react-native";
+  TouchableWithoutFeedbackProps,
+} from "react-native"; // "/Users/faisolphalawon/Library/Caches/typescript/4.9/node_modules/@types/react-native"//
 
 const styles = StyleSheet.create({
   button: {
@@ -28,30 +29,26 @@ const styles = StyleSheet.create({
   },
 });
 
-const NativeButton = createReactClass({
-  propTypes: {
-    // Extract parent props
-    ...TouchableWithoutFeedback.propTypes,
-    textStyle: PropTypes.any,//PropTypes.shape(TextStyle),
-    disabledStyle: PropTypes.any,
-    children: PropTypes.node.isRequired,
-    underlayColor: PropTypes.string,
-    background: PropTypes.any,
-  },
+interface IPropsNativeButton { 
+  underlayColor?:string;
+  background?: string;
+  accessibilityComponentType?:string ;
+  accessibilityTraits?:any;
+  disabledStyle?: any;
+  children: React.ReactNode;
+  textStyle: any;
+} 
 
-  statics: {
-    isAndroid: Platform.OS === "android",
-  },
-
-  getDefaultProps: function () {
-    return {
-      textStyle: null,
-      disabledStyle: null,
-      underlayColor: null,
-    };
-  },
-
-  _renderText: function () {
+export class NativeButton extends React.Component<IPropsNativeButton & TouchableWithoutFeedbackProps > {
+  isAndroid= Platform.OS === "android"
+  constructor(props:IPropsNativeButton & TouchableWithoutFeedbackProps) {
+    super(props)
+  
+    /* this.state = {
+       
+    }; */
+  };
+  _renderText=()=> {
     // If children is not a string don't wrapp it in a Text component
     if (typeof this.props.children !== "string") {
       return this.props.children;
@@ -66,14 +63,13 @@ const NativeButton = createReactClass({
         {this.props.children}
       </Text>
     );
-  },
-
-  render: function () {
+  }
+  render() {
     const disabledStyle = this.props.disabled
-      ? this.props.disabledStyle || styles.opacity
-      : {};
+    ? this.props.disabledStyle || styles.opacity
+    : {};
 
-    // Extract Button props
+  // Extract Button props
     let buttonProps = {
       accessibilityComponentType: this.props.accessibilityComponentType,
       accessibilityTraits: this.props.accessibilityTraits,
@@ -92,7 +88,7 @@ const NativeButton = createReactClass({
     };
 
     // Render Native Android Button
-    if (NativeButton.isAndroid) {
+    if (this.isAndroid) {
       buttonProps = Object.assign(buttonProps, {
         background:
           this.props.background ||
@@ -118,7 +114,10 @@ const NativeButton = createReactClass({
         {this._renderText()}
       </TouchableHighlight>
     );
-  },
-});
+  }
+}
+
+
+
 
 export default NativeButton;

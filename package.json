@@ -1,11 +1,11 @@
 {
   "name": "@faisolp/react-native-swipeout",
-  "version": "2.3.7",
+  "version": "2.3.8rc2",
   "description": "iOS-style swipeout buttons behind component",
   "main": "dist/index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && cross-env BABEL_ENV=commonjs babel src --out-dir dist",
+    "build": "rm -rf dist && cross-env BABEL_ENV=commonjs babel src  --extensions .ts,.tsx --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

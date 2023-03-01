@@ -6,13 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _reactTweenState = require("react-tween-state");
 
 var _reactTweenState2 = _interopRequireDefault(_reactTweenState);
 
-var _NativeButton = require("./NativeButton");
+var _SwipeoutBtn = require("./SwipeoutBtn");
 
-var _NativeButton2 = _interopRequireDefault(_NativeButton);
+var _SwipeoutBtn2 = _interopRequireDefault(_SwipeoutBtn);
 
 var _styles = require("./styles");
 
@@ -22,125 +24,327 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require("prop-types");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _createReactClass = require("create-react-class");
-
-var _createReactClass2 = _interopRequireDefault(_createReactClass);
-
 var _reactNative = require("react-native");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SwipeoutBtn = (0, _createReactClass2.default)({
-  displayName: "SwipeoutBtn",
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  propTypes: {
-    backgroundColor: _propTypes2.default.string,
-    color: _propTypes2.default.string,
-    component: _propTypes2.default.node,
-    onPress: _propTypes2.default.func,
-    text: _propTypes2.default.node,
-    type: _propTypes2.default.string,
-    underlayColor: _propTypes2.default.string
-  },
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      backgroundColor: null,
-      color: null,
-      component: null,
-      underlayColor: null,
-      height: 0,
-      onPress: null,
-      disabled: false,
-      text: "Click me",
-      type: "",
-      width: 0
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+//import NativeButton from "./NativeButton";
+//'/Users/faisolphalawon/Library/Caches/typescript/4.9/node_modules/@types/react/index'//
+//import PropTypes from "prop-types";
+//import createReactClass from "create-react-class";
+
+//"/Users/faisolphalawon/Library/Caches/typescript/4.9/node_modules/@types/react-native"//
+
+/* interface IPropsSwipeout {
+  autoClose: boolean
+  backgroundColor: string
+  close: boolean
+  left: any[]
+  onOpen: (sectionID:string, rowID:string, direction?:TDirection)=>void
+  onClose: (sectionID:string, rowID:string, direction?:TDirection)=>void
+  right: any[]
+  scroll: (val:boolean)=>void
+  style: any
+  sensitivity: number
+  buttonWidth: number
+  disabled: boolean
+  sectionID:string
+  rowID:string
+  children?:any,
+} */
+var Swipeout = function (_Component) {
+  _inherits(Swipeout, _Component);
+
+  function Swipeout(props) {
+    _classCallCheck(this, Swipeout);
+
+    var _this = _possibleConstructorReturn(this, (Swipeout.__proto__ || Object.getPrototypeOf(Swipeout)).call(this, props));
+
+    _this.mixins = [_reactTweenState2.default.Mixin];
+    _this.swipeoutContent = null;
+    _this._panResponder = null;
+
+    _this.componentDidMount = function () {
+      _this._panResponder = _reactNative.PanResponder.create({
+        onStartShouldSetPanResponder: function onStartShouldSetPanResponder(event, gestureState) {
+          return true;
+        },
+        onStartShouldSetPanResponderCapture: function onStartShouldSetPanResponderCapture(event, gestureState) {
+          return _this.state.openedLeft || _this.state.openedRight;
+        },
+        onMoveShouldSetPanResponderCapture: function onMoveShouldSetPanResponderCapture(event, gestureState) {
+          return Math.abs(gestureState.dx) > (_this.props.sensitivity || 0) && Math.abs(gestureState.dy) <= (_this.props.sensitivity || 0);
+        },
+        onPanResponderGrant: _this._handlePanResponderGrant,
+        onPanResponderMove: _this._handlePanResponderMove,
+        onPanResponderRelease: _this._handlePanResponderEnd,
+        onPanResponderTerminate: _this._handlePanResponderEnd,
+        onShouldBlockNativeResponder: function onShouldBlockNativeResponder(event, gestureState) {
+          return false;
+        },
+        onPanResponderTerminationRequest: function onPanResponderTerminationRequest() {
+          return false;
+        }
+      });
     };
-  },
 
-  render: function render() {
-    var btn = this.props;
-
-    var styleSwipeoutBtn = [_styles2.default.swipeoutBtn];
-
-    //  apply "type" styles (delete || primary || secondary)
-    if (btn.type === "delete") styleSwipeoutBtn.push(_styles2.default.colorDelete);else if (btn.type === "primary") styleSwipeoutBtn.push(_styles2.default.colorPrimary);else if (btn.type === "secondary") styleSwipeoutBtn.push(_styles2.default.colorSecondary);
-
-    //  apply background color
-    if (btn.backgroundColor) styleSwipeoutBtn.push([{ backgroundColor: btn.backgroundColor }]);
-
-    styleSwipeoutBtn.push([{
-      height: btn.height,
-      width: btn.width
-    }]);
-
-    var styleSwipeoutBtnComponent = [];
-
-    //  set button dimensions
-    styleSwipeoutBtnComponent.push([{
-      height: btn.height,
-      width: btn.width
-    }]);
-
-    var styleSwipeoutBtnText = [_styles2.default.swipeoutBtnText];
-
-    //  apply text color
-    if (btn.color) styleSwipeoutBtnText.push({ color: btn.color });
-
-    return _react2.default.createElement(
-      _NativeButton2.default,
-      {
-        onPress: this.props.onPress,
-        underlayColor: this.props.underlayColor,
-        disabled: this.props.disabled,
-        style: [_styles2.default.swipeoutBtnTouchable, styleSwipeoutBtn],
-        textStyle: styleSwipeoutBtnText
-      },
-      btn.component ? _react2.default.createElement(
-        _reactNative.View,
-        { style: styleSwipeoutBtnComponent },
-        btn.component
-      ) : btn.text
-    );
-  }
-});
-
-var Swipeout = (0, _createReactClass2.default)({
-  displayName: "Swipeout",
-
-  mixins: [_reactTweenState2.default.Mixin],
-
-  propTypes: {
-    autoClose: _propTypes2.default.bool,
-    backgroundColor: _propTypes2.default.string,
-    close: _propTypes2.default.bool,
-    left: _propTypes2.default.array,
-    onOpen: _propTypes2.default.func,
-    onClose: _propTypes2.default.func,
-    right: _propTypes2.default.array,
-    scroll: _propTypes2.default.func,
-    style: _propTypes2.default.shape(_reactNative.ViewStyle),
-    sensitivity: _propTypes2.default.number,
-    buttonWidth: _propTypes2.default.number,
-    disabled: _propTypes2.default.bool
-  },
-
-  getDefaultProps: function getDefaultProps() {
-    return {
-      disabled: false,
-      rowID: -1,
-      sectionID: -1,
-      sensitivity: 50
+    _this.componentDidUpdate = function (prevProps) {
+      if (prevProps.close) _this._close();
+      if (prevProps.openRight) _this._openRight();
+      if (prevProps.openLeft) _this._openLeft();
     };
-  },
 
-  getInitialState: function getInitialState() {
-    return {
-      autoClose: this.props.autoClose || false,
+    _this._handlePanResponderGrant = function (e, gestureState) {
+      //_handlePanResponderGrant: function (e: Object, gestureState: Object) {
+      if (_this.props.disabled) return;
+      if (!_this.state.openedLeft && !_this.state.openedRight) {
+        _this._callOnOpen();
+      } else {
+        _this._callOnClose();
+      }
+      _this.swipeoutContent.measure(function (ox, oy, width, height) {
+        var buttonWidth = _this.props.buttonWidth || width / 5;
+        _this.setState({
+          btnWidth: buttonWidth,
+          btnsLeftWidth: _this.props.left ? buttonWidth * _this.props.left.length : 0,
+          btnsRightWidth: _this.props.right ? buttonWidth * _this.props.right.length : 0,
+          swiping: true,
+          timeStart: new Date().getTime()
+        });
+      });
+    };
+
+    _this._handlePanResponderMove = function (e, gestureState) {
+      //_handlePanResponderMove: function (e: Object, gestureState: Object) {
+      if (_this.props.disabled) return;
+      var posX = gestureState.dx;
+      var posY = gestureState.dy;
+      var leftWidth = _this.state.btnsLeftWidth;
+      var rightWidth = _this.state.btnsRightWidth;
+      if (_this.state.openedRight) posX = gestureState.dx - rightWidth;else if (_this.state.openedLeft) posX = gestureState.dx + leftWidth;
+
+      //  prevent scroll if moveX is true
+      var moveX = Math.abs(posX) > Math.abs(posY);
+      if (_this.props.scroll) {
+        if (moveX) _this.props.scroll(false);else _this.props.scroll(true);
+      }
+      if (_this.state.swiping) {
+        //  move content to reveal swipeout
+        if (posX < 0 && _this.props.right) {
+          _this.setState({ contentPos: Math.min(posX, 0) });
+        } else if (posX > 0 && _this.props.left) {
+          _this.setState({ contentPos: Math.max(posX, 0) });
+        }
+      }
+    };
+
+    _this._handlePanResponderEnd = function (e, gestureState) {
+      if (_this.props.disabled) return;
+      var posX = gestureState.dx;
+      var contentPos = _this.state.contentPos;
+      var contentWidth = _this.state.contentWidth;
+      var btnsLeftWidth = _this.state.btnsLeftWidth;
+      var btnsRightWidth = _this.state.btnsRightWidth;
+
+      //  minimum threshold to open swipeout
+      var openX = contentWidth * 0.33;
+
+      //  should open swipeout
+      var openLeft = posX > openX || posX > btnsLeftWidth / 2;
+      var openRight = posX < -openX || posX < -btnsRightWidth / 2;
+
+      //  account for open swipeouts
+      if (_this.state.openedRight) var openRight = posX - openX < -openX;
+      if (_this.state.openedLeft) var openLeft = posX + openX > openX;
+
+      //  reveal swipeout on quick swipe
+      var timeDiff = new Date().getTime() - (_this.state.timeStart || 0) < 200;
+      if (timeDiff) {
+        var openRight = posX < -openX / 10 && !_this.state.openedLeft;
+        var openLeft = posX > openX / 10 && !_this.state.openedRight;
+      }
+
+      if (_this.state.swiping) {
+        if (openRight && contentPos < 0 && posX < 0) {
+          _this._open(-btnsRightWidth, "right");
+        } else if (openLeft && contentPos > 0 && posX > 0) {
+          _this._open(btnsLeftWidth, "left");
+        } else {
+          _this._close();
+        }
+      }
+
+      //  Allow scroll
+      if (_this.props.scroll) _this.props.scroll(true);
+    };
+
+    _this._tweenContent = function (state, endValue) {
+      (0, _reactTweenState2.default)(state, {
+        easing: _reactTweenState2.default.easingTypes.easeInOutQuad,
+        duration: endValue === 0 ? _this.state.tweenDuration * 1.5 : _this.state.tweenDuration,
+        endValue: endValue
+      });
+    };
+
+    _this._rubberBandEasing = function (valueArg, limit) {
+      var value = valueArg.toString() === "NaN" ? 0 : valueArg;
+      if (value < 0 && value < limit) return limit - Math.pow(limit - value, 0.85);else if (value > 0 && value > limit) return limit + Math.pow(value - limit, 0.85);
+      return value;
+    };
+
+    _this._autoClose = function (btn) {
+      if (_this.state.autoClose) _this._close();
+      var onPress = btn.onPress;
+      if (onPress) onPress();
+    };
+
+    _this._open = function (contentPos, direction) {
+      var left = direction === "left";
+      var _this$props = _this.props,
+          sectionId = _this$props.sectionId,
+          rowId = _this$props.rowId,
+          onOpen = _this$props.onOpen;
+
+
+      onOpen && sectionId && rowId && onOpen(sectionId, rowId, direction);
+      _this._tweenContent("contentPos", contentPos);
+      _this.setState({
+        contentPos: contentPos,
+        openedLeft: left,
+        openedRight: !left,
+        swiping: false
+      });
+    };
+
+    _this._close = function () {
+      var _this$props2 = _this.props,
+          sectionId = _this$props2.sectionId,
+          rowId = _this$props2.rowId,
+          onClose = _this$props2.onClose;
+      //const sectionId =this.props.sectionId||0
+      //const rowId =this.props.rowId||0
+
+      if (onClose && sectionId && rowId && (_this.state.openedLeft || _this.state.openedRight)) {
+        var _direction = _this.state.openedRight ? "right" : "left";
+        onClose(sectionId, rowId, _direction);
+      }
+      _this._tweenContent("contentPos", 0);
+      _this._callOnClose();
+      _this.setState({
+        openedRight: false,
+        openedLeft: false,
+        swiping: false
+      });
+    };
+
+    _this._callOnClose = function () {
+      var _this$props3 = _this.props,
+          sectionId = _this$props3.sectionId,
+          rowId = _this$props3.rowId,
+          onClose = _this$props3.onClose;
+
+      var direction = _this.state.openedRight ? "right" : "left";
+      if (onClose && rowId && sectionId) onClose(sectionId, rowId, direction);
+    };
+
+    _this._callOnOpen = function () {
+      var _this$props4 = _this.props,
+          sectionId = _this$props4.sectionId,
+          rowId = _this$props4.rowId,
+          onOpen = _this$props4.onOpen;
+
+      var direction = _this.state.openedRight ? "right" : "left";
+      if (onOpen && rowId && sectionId) onOpen(sectionId, rowId, direction);
+    };
+
+    _this._openRight = function () {
+      _this.swipeoutContent.measure(function (ox, oy, width, height) {
+        var btnWidth = _this.props.buttonWidth || width / 5;
+
+        _this.setState({
+          btnWidth: btnWidth,
+          btnsRightWidth: _this.props.right ? btnWidth * _this.props.right.length : 0
+        }, function () {
+          _this._tweenContent("contentPos", -_this.state.btnsRightWidth);
+          _this._callOnOpen();
+          _this.setState({
+            contentPos: -_this.state.btnsRightWidth,
+            openedLeft: false,
+            openedRight: true,
+            swiping: false
+          });
+        });
+      });
+    };
+
+    _this._openLeft = function () {
+      _this.swipeoutContent.measure(function (ox, oy, width, height) {
+        var btnWidth = _this.props.buttonWidth || width / 5;
+
+        _this.setState({
+          btnWidth: btnWidth,
+          btnsLeftWidth: _this.props.left ? btnWidth * _this.props.left.length : 0
+        }, function () {
+          _this._tweenContent("contentPos", _this.state.btnsLeftWidth);
+          _this._callOnOpen();
+          _this.setState({
+            contentPos: _this.state.btnsLeftWidth,
+            openedLeft: true,
+            openedRight: false,
+            swiping: false
+          });
+        });
+      });
+    };
+
+    _this._onLayout = function (event) {
+      var _event$nativeEvent$la = event.nativeEvent.layout,
+          width = _event$nativeEvent$la.width,
+          height = _event$nativeEvent$la.height;
+
+      _this.setState({
+        contentWidth: width,
+        contentHeight: height
+      });
+    };
+
+    _this._renderButtons = function (buttons, isVisible, style) {
+      if (buttons && isVisible) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: style },
+          buttons.map(_this._renderButton)
+        );
+      } else {
+        return _react2.default.createElement(_reactNative.View, null);
+      }
+    };
+
+    _this._renderButton = function (btn, i) {
+      return _react2.default.createElement(_SwipeoutBtn2.default, {
+        backgroundColor: btn.backgroundColor,
+        color: btn.color,
+        component: btn.component,
+        disabled: btn.disabled,
+        height: _this.state.contentHeight,
+        key: i,
+        onPress: function onPress() {
+          return _this._autoClose(btn);
+        },
+        text: btn.text,
+        type: btn.type,
+        underlayColor: btn.underlayColor,
+        width: _this.state.btnWidth
+      });
+    };
+
+    _this.state = {
+      autoClose: _this.props.autoClose || false,
       btnWidth: 0,
       btnsLeftWidth: 0,
       btnsRightWidth: 0,
@@ -148,350 +352,88 @@ var Swipeout = (0, _createReactClass2.default)({
       contentPos: 0,
       contentWidth: 0,
       openedRight: false,
+      openedLeft: false,
       swiping: false,
-      tweenDuration: 160,
-      timeStart: null
+      tweenDuration: 160
+      //timeStart: null,
     };
-  },
-
-  //componentWillMount:  function () {
-  componentDidMount: function componentDidMount() {
-    var _this = this;
-
-    this._panResponder = _reactNative.PanResponder.create({
-      onStartShouldSetPanResponder: function onStartShouldSetPanResponder(event, gestureState) {
-        return true;
-      },
-      onStartShouldSetPanResponderCapture: function onStartShouldSetPanResponderCapture(event, gestureState) {
-        return _this.state.openedLeft || _this.state.openedRight;
-      },
-      onMoveShouldSetPanResponderCapture: function onMoveShouldSetPanResponderCapture(event, gestureState) {
-        return Math.abs(gestureState.dx) > _this.props.sensitivity && Math.abs(gestureState.dy) <= _this.props.sensitivity;
-      },
-      onPanResponderGrant: this._handlePanResponderGrant,
-      onPanResponderMove: this._handlePanResponderMove,
-      onPanResponderRelease: this._handlePanResponderEnd,
-      onPanResponderTerminate: this._handlePanResponderEnd,
-      onShouldBlockNativeResponder: function onShouldBlockNativeResponder(event, gestureState) {
-        return false;
-      },
-      onPanResponderTerminationRequest: function onPanResponderTerminationRequest() {
-        return false;
-      }
-    });
-  },
-
-  //componentWillReceiveProps: function (nextProps) {
-  componentDidUpdate: function componentDidUpdate(prevProps) {
-    if (prevProps.close) this._close();
-    if (prevProps.openRight) this._openRight();
-    if (prevProps.openLeft) this._openLeft();
-  },
-  _handlePanResponderGrant: function _handlePanResponderGrant(e, gestureState) {
-    var _this2 = this;
-
-    //_handlePanResponderGrant: function (e: Object, gestureState: Object) {
-    if (this.props.disabled) return;
-    if (!this.state.openedLeft && !this.state.openedRight) {
-      this._callOnOpen();
-    } else {
-      this._callOnClose();
-    }
-    this.swipeoutContent.measure(function (ox, oy, width, height) {
-      var buttonWidth = _this2.props.buttonWidth || width / 5;
-      _this2.setState({
-        btnWidth: buttonWidth,
-        btnsLeftWidth: _this2.props.left ? buttonWidth * _this2.props.left.length : 0,
-        btnsRightWidth: _this2.props.right ? buttonWidth * _this2.props.right.length : 0,
-        swiping: true,
-        timeStart: new Date().getTime()
-      });
-    });
-  },
-
-  _handlePanResponderMove: function _handlePanResponderMove(e, gestureState) {
-    //_handlePanResponderMove: function (e: Object, gestureState: Object) {
-    if (this.props.disabled) return;
-    var posX = gestureState.dx;
-    var posY = gestureState.dy;
-    var leftWidth = this.state.btnsLeftWidth;
-    var rightWidth = this.state.btnsRightWidth;
-    if (this.state.openedRight) var posX = gestureState.dx - rightWidth;else if (this.state.openedLeft) var posX = gestureState.dx + leftWidth;
-
-    //  prevent scroll if moveX is true
-    var moveX = Math.abs(posX) > Math.abs(posY);
-    if (this.props.scroll) {
-      if (moveX) this.props.scroll(false);else this.props.scroll(true);
-    }
-    if (this.state.swiping) {
-      //  move content to reveal swipeout
-      if (posX < 0 && this.props.right) {
-        this.setState({ contentPos: Math.min(posX, 0) });
-      } else if (posX > 0 && this.props.left) {
-        this.setState({ contentPos: Math.max(posX, 0) });
-      }
-    }
-  },
+    return _this;
+  }
 
   //_handlePanResponderEnd: function (e: Object, gestureState: Object) {
-  _handlePanResponderEnd: function _handlePanResponderEnd(e, gestureState) {
-    if (this.props.disabled) return;
-    var posX = gestureState.dx;
-    var contentPos = this.state.contentPos;
-    var contentWidth = this.state.contentWidth;
-    var btnsLeftWidth = this.state.btnsLeftWidth;
-    var btnsRightWidth = this.state.btnsRightWidth;
 
-    //  minimum threshold to open swipeout
-    var openX = contentWidth * 0.33;
-
-    //  should open swipeout
-    var openLeft = posX > openX || posX > btnsLeftWidth / 2;
-    var openRight = posX < -openX || posX < -btnsRightWidth / 2;
-
-    //  account for open swipeouts
-    if (this.state.openedRight) var openRight = posX - openX < -openX;
-    if (this.state.openedLeft) var openLeft = posX + openX > openX;
-
-    //  reveal swipeout on quick swipe
-    var timeDiff = new Date().getTime() - this.state.timeStart < 200;
-    if (timeDiff) {
-      var openRight = posX < -openX / 10 && !this.state.openedLeft;
-      var openLeft = posX > openX / 10 && !this.state.openedRight;
-    }
-
-    if (this.state.swiping) {
-      if (openRight && contentPos < 0 && posX < 0) {
-        this._open(-btnsRightWidth, "right");
-      } else if (openLeft && contentPos > 0 && posX > 0) {
-        this._open(btnsLeftWidth, "left");
-      } else {
-        this._close();
-      }
-    }
-
-    //  Allow scroll
-    if (this.props.scroll) this.props.scroll(true);
-  },
-
-  _tweenContent: function _tweenContent(state, endValue) {
-    this.tweenState(state, {
-      easing: _reactTweenState2.default.easingTypes.easeInOutQuad,
-      duration: endValue === 0 ? this.state.tweenDuration * 1.5 : this.state.tweenDuration,
-      endValue: endValue
-    });
-  },
-
-  _rubberBandEasing: function _rubberBandEasing(valueArg, limit) {
-    var value = valueArg.toString() === "NaN" ? 0 : valueArg;
-    if (value < 0 && value < limit) return limit - Math.pow(limit - value, 0.85);else if (value > 0 && value > limit) return limit + Math.pow(value - limit, 0.85);
-    return value;
-  },
 
   //  close swipeout on button press
-  _autoClose: function _autoClose(btn) {
-    if (this.state.autoClose) this._close();
-    var onPress = btn.onPress;
-    if (onPress) onPress();
-  },
 
-  _open: function _open(contentPos, direction) {
-    var left = direction === "left";
-    var _props = this.props,
-        sectionID = _props.sectionID,
-        rowID = _props.rowID,
-        onOpen = _props.onOpen;
 
-    onOpen && onOpen(sectionID, rowID, direction);
-    this._tweenContent("contentPos", contentPos);
-    this.setState({
-      contentPos: contentPos,
-      openedLeft: left,
-      openedRight: !left,
-      swiping: false
-    });
-  },
+  _createClass(Swipeout, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
 
-  _close: function _close() {
-    var _props2 = this.props,
-        sectionID = _props2.sectionID,
-        rowID = _props2.rowID,
-        onClose = _props2.onClose;
+      var contentWidth = this.state.contentWidth;
+      var posX = (0, _reactTweenState.getTweeningValue)("contentPos");
 
-    if (onClose && (this.state.openedLeft || this.state.openedRight)) {
-      var direction = this.state.openedRight ? "right" : "left";
-      onClose(sectionID, rowID, direction);
-    }
-    this._tweenContent("contentPos", 0);
-    this._callOnClose();
-    this.setState({
-      openedRight: false,
-      openedLeft: false,
-      swiping: false
-    });
-  },
-
-  _callOnClose: function _callOnClose() {
-    if (this.props.onClose) this.props.onClose(this.props.sectionID, this.props.rowID);
-  },
-
-  _callOnOpen: function _callOnOpen() {
-    if (this.props.onOpen) this.props.onOpen(this.props.sectionID, this.props.rowID);
-  },
-
-  _openRight: function _openRight() {
-    var _this3 = this;
-
-    this.swipeoutContent.measure(function (ox, oy, width, height) {
-      var btnWidth = _this3.props.buttonWidth || width / 5;
-
-      _this3.setState({
-        btnWidth: btnWidth,
-        btnsRightWidth: _this3.props.right ? btnWidth * _this3.props.right.length : 0
-      }, function () {
-        _this3._tweenContent("contentPos", -_this3.state.btnsRightWidth);
-        _this3._callOnOpen();
-        _this3.setState({
-          contentPos: -_this3.state.btnsRightWidth,
-          openedLeft: false,
-          openedRight: true,
-          swiping: false
-        });
-      });
-    });
-  },
-
-  _openLeft: function _openLeft() {
-    var _this4 = this;
-
-    this.swipeoutContent.measure(function (ox, oy, width, height) {
-      var btnWidth = _this4.props.buttonWidth || width / 5;
-
-      _this4.setState({
-        btnWidth: btnWidth,
-        btnsLeftWidth: _this4.props.left ? btnWidth * _this4.props.left.length : 0
-      }, function () {
-        _this4._tweenContent("contentPos", _this4.state.btnsLeftWidth);
-        _this4._callOnOpen();
-        _this4.setState({
-          contentPos: _this4.state.btnsLeftWidth,
-          openedLeft: true,
-          openedRight: false,
-          swiping: false
-        });
-      });
-    });
-  },
-
-  render: function render() {
-    var _this5 = this;
-
-    var contentWidth = this.state.contentWidth;
-    var posX = this.getTweeningValue("contentPos");
-
-    var styleSwipeout = [_styles2.default.swipeout, this.props.style];
-    if (this.props.backgroundColor) {
-      styleSwipeout.push([{ backgroundColor: this.props.backgroundColor }]);
-    }
-
-    var limit = -this.state.btnsRightWidth;
-    if (posX > 0) var limit = this.state.btnsLeftWidth;
-
-    var styleLeftPos = {
-      left: {
-        left: 0,
-        overflow: "hidden",
-        width: Math.min(limit * (posX / limit), limit)
+      var styleSwipeout = [_styles2.default.swipeout, this.props.style];
+      if (this.props.backgroundColor) {
+        styleSwipeout.push([{ backgroundColor: this.props.backgroundColor }]);
       }
-    };
-    var styleRightPos = {
-      right: {
-        left: Math.abs(contentWidth + Math.max(limit, posX)),
-        right: 0
-      }
-    };
-    var styleContentPos = {
-      content: {
-        transform: [{ translateX: this._rubberBandEasing(posX, limit) }]
-      }
-    };
 
-    var styleContent = [_styles2.default.swipeoutContent];
-    styleContent.push(styleContentPos.content);
+      var limit = -this.state.btnsRightWidth;
+      if (posX > 0) limit = this.state.btnsLeftWidth;
 
-    var styleRight = [_styles2.default.swipeoutBtns];
-    styleRight.push(styleRightPos.right);
+      var styleLeftPos = {
+        left: {
+          left: 0,
+          overflow: "hidden",
+          width: Math.min(limit * (posX / limit), limit)
+        }
+      };
+      var styleRightPos = {
+        right: {
+          left: Math.abs(contentWidth + Math.max(limit, posX)),
+          right: 0
+        }
+      };
+      var styleContentPos = {
+        content: {
+          transform: [{ translateX: this._rubberBandEasing(posX, limit) }]
+        }
+      };
 
-    var styleLeft = [_styles2.default.swipeoutBtns];
-    styleLeft.push(styleLeftPos.left);
+      var styleContent = [_styles2.default.swipeoutContent];
+      styleContent.push(styleContentPos.content);
 
-    var isRightVisible = posX < 0;
-    var isLeftVisible = posX > 0;
-    if (!this._panResponder) return _react2.default.createElement(_reactNative.View, { style: styleSwipeout });
-    return _react2.default.createElement(
-      _reactNative.View,
-      { style: styleSwipeout },
-      _react2.default.createElement(
-        _reactNative.View,
-        _extends({
-          ref: function ref(node) {
-            return _this5.swipeoutContent = node;
-          },
-          style: styleContent,
-          onLayout: this._onLayout
-        }, this._panResponder.panHandlers),
-        this.props.children
-      ),
-      this._renderButtons(this.props.right, isRightVisible, styleRight),
-      this._renderButtons(this.props.left, isLeftVisible, styleLeft)
-    );
-  },
+      var styleRight = [_styles2.default.swipeoutBtns];
+      styleRight.push(styleRightPos.right);
 
-  _onLayout: function _onLayout(event) {
-    var _event$nativeEvent$la = event.nativeEvent.layout,
-        width = _event$nativeEvent$la.width,
-        height = _event$nativeEvent$la.height;
+      var styleLeft = [_styles2.default.swipeoutBtns];
+      styleLeft.push(styleLeftPos.left);
 
-    this.setState({
-      contentWidth: width,
-      contentHeight: height
-    });
-  },
-
-  _renderButtons: function _renderButtons(buttons, isVisible, style) {
-    if (buttons && isVisible) {
+      var isRightVisible = posX < 0;
+      var isLeftVisible = posX > 0;
+      if (!this._panResponder) return _react2.default.createElement(_reactNative.View, { style: styleSwipeout });
       return _react2.default.createElement(
         _reactNative.View,
-        { style: style },
-        buttons.map(this._renderButton)
+        { style: styleSwipeout },
+        _react2.default.createElement(
+          _reactNative.View,
+          _extends({
+            ref: function ref(node) {
+              return _this2.swipeoutContent = node;
+            },
+            style: styleContent,
+            onLayout: this._onLayout
+          }, this._panResponder.panHandlers),
+          this.props.children
+        ),
+        this._renderButtons(this.props.right, isRightVisible, styleRight),
+        this._renderButtons(this.props.left, isLeftVisible, styleLeft)
       );
-    } else {
-      return _react2.default.createElement(_reactNative.View, null);
     }
-  },
+  }]);
 
-  _renderButton: function _renderButton(btn, i) {
-    var _this6 = this;
-
-    return _react2.default.createElement(SwipeoutBtn, {
-      backgroundColor: btn.backgroundColor,
-      color: btn.color,
-      component: btn.component,
-      disabled: btn.disabled,
-      height: this.state.contentHeight,
-      key: i,
-      onPress: function onPress() {
-        return _this6._autoClose(btn);
-      },
-      text: btn.text,
-      type: btn.type,
-      underlayColor: btn.underlayColor,
-      width: this.state.btnWidth
-    });
-  }
-});
-
-Swipeout.NativeButton = _NativeButton2.default;
-Swipeout.SwipeoutButton = SwipeoutBtn;
+  return Swipeout;
+}(_react.Component);
 
 exports.default = Swipeout;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare module 'react-native-swipeout' {
+declare module '@faisolp/react-native-swipeout' {
     export interface SwipeoutButtonProperties {
         backgroundColor?: string;
         color?: string;
@@ -29,6 +29,7 @@ declare module 'react-native-swipeout' {
         sectionId?: number;
         openRight?: boolean;
         openLeft?: boolean;
+        children: React.ReactNode; // 👈️ added type for children
     }
 
     export default class Swipeout extends React.Component<SwipeoutProperties,any> {}
