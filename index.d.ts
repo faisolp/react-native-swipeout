@@ -29,6 +29,7 @@ declare module '@faisolp/react-native-swipeout' {
         sectionId?: number;
         openRight?: boolean;
         openLeft?: boolean;
+        children: React.ReactNode; // 👈️ added type for children
     }
 
     export default class Swipeout extends React.Component<SwipeoutProperties,any> {}
