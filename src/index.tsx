@@ -1,4 +1,4 @@
-import tweenState,{getTweeningValue} from "react-tween-state";
+import tweenState from "react-tween-state";
 //import NativeButton from "./NativeButton";
 import SwipeoutBtn, { SwipeoutButtonProperties } from "./SwipeoutBtn";
 import styles from "./styles";
@@ -15,6 +15,8 @@ import {
   View,
   ViewStyle,
 } from  "react-native"; //"/Users/faisolphalawon/Library/Caches/typescript/4.9/node_modules/@types/react-native"//
+
+import reactMixin from 'react-mixin'
 
 type TDirection = "right" | "left"
 
@@ -77,7 +79,7 @@ interface IStateSwipeout {
 }
 
  class Swipeout extends Component<SwipeoutProperties,IStateSwipeout> {
-  mixins= [tweenState.Mixin]
+  //mixins= [tweenState.Mixin]
   swipeoutContent: any=null
   _panResponder:any =null
   constructor(props:SwipeoutProperties) {
@@ -215,7 +217,7 @@ interface IStateSwipeout {
   }
   
   _tweenContent=  (state, endValue) =>{
-      tweenState(state, {
+      this.tweenState(state, {
         easing: tweenState.easingTypes.easeInOutQuad,
         duration:
           endValue === 0
@@ -376,7 +378,7 @@ interface IStateSwipeout {
 
   render() {
     var contentWidth = this.state.contentWidth;
-    var posX = getTweeningValue("contentPos");
+    var posX = this.getTweeningValue("contentPos");
 
     var styleSwipeout = [styles.swipeout, this.props.style];
     if (this.props.backgroundColor) {
@@ -434,5 +436,6 @@ interface IStateSwipeout {
     );
   }
 }
+reactMixin.onClass(Swipeout, tweenState.Mixin);
 
 export default Swipeout;
